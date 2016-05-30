@@ -2113,48 +2113,6 @@ var dataSets = [
     // oceania
 ];
 
-const DIRECTION = {
-    EXPORT : "export_val",
-    IMPORT : "import_val"
-};
-
-var maxValue = 0;
-var minDate  = (new Date()).getTime(); //all our data is in past.
-var maxDate  = 0;
-
-function simpleMax(a, b) { return a > b ? a : b; }
-function simpleMin(a, b) { return a < b ? a : b; }
-
-function prepareDataSets(dataSets) {
-    var importData = [];
-    var exportData = [];
-
-    dataSets.forEach(function (dataSet) {
-        var importLayer = [];
-        var exportLayer = [];
-
-        dataSet.forEach(function(row) {
-            var date      = (new Date(row[0])).getTime();
-            var direction = row[1];
-            var value     = parseInt(row[2]);
-
-            var entryToAppend  = direction === DIRECTION.EXPORT ? exportLayer : importLayer;
-            entryToAppend.push({"x" : date, "y" : value});
-
-            maxValue = simpleMax(maxValue, value);
-            minDate  = simpleMin(minDate, date);
-            maxDate  = simpleMax(maxDate, date);
-        });
-
-        importData.push(importLayer);
-        exportData.push(exportLayer);
-    });
-
-    return {"importData" : importData, "exportData" : exportData};
-}
-
-var preparedDataSet = prepareDataSets(dataSets);
-
 var auxMap = [
     {
         "name" : "asia",
@@ -2181,3 +2139,45 @@ var auxMap = [
         "color" : "red"
     }
 ];
+
+const DIRECTION = {
+    EXPORT : "export_val",
+    IMPORT : "import_val"
+};
+
+var maxValue = 0;
+var minDate  = (new Date()).getTime(); //all our data is in past.
+var maxDate  = 0;
+
+function simpleMax(a, b) { return a > b ? a : b; }
+function simpleMin(a, b) { return a < b ? a : b; }
+
+function prepareDataSets(dataSets) {
+    var importLayers = [];
+    var exportLayers = [];
+
+    dataSets.forEach(function (dataSet) {
+        var importLayer = [];
+        var exportLayer = [];
+
+        dataSet.forEach(function(row) {
+            var date      = (new Date(row[0])).getTime();
+            var direction = row[1];
+            var value     = parseInt(row[2]);
+
+            var entryToAppend  = direction === DIRECTION.EXPORT ? exportLayer : importLayer;
+            entryToAppend.push({"x" : date, "y" : value});
+
+            maxValue = simpleMax(maxValue, value);
+            minDate  = simpleMin(minDate, date);
+            maxDate  = simpleMax(maxDate, date);
+        });
+
+        importLayers.push(importLayer);
+        exportLayers.push(exportLayer);
+    });
+
+    return {"import" : importLayers, "export" : exportLayers};
+}
+
+var absoluteLayers = prepareDataSets(dataSets);
