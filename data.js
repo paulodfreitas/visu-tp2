@@ -2138,26 +2138,19 @@ function prepareDataSets(dataSets) {
             var direction = row[1];
             var value     = parseInt(row[2]);
 
+            var entryToAppend  = direction === DIRECTION.EXPORT ? exportLayer : importLayer;
+            entryToAppend.push({"x" : date, "y" : value});
+
             maxValue = simpleMax(maxValue, value);
             minDate  = simpleMin(minDate, date);
             maxDate  = simpleMax(maxDate, date);
-
-            var entryToAppend  = direction === DIRECTION.EXPORT ? exportLayer : importLayer;
-            entryToAppend.push({
-                "x" : date,
-                "y" : value
-            });
-
         });
 
         importData.push(importLayer);
         exportData.push(exportLayer);
     });
 
-    return {
-        "importData" : importData,
-        "exportData" : exportData
-    };
+    return {"importData" : importData, "exportData" : exportData};
 }
 
 var preparedDataSet = prepareDataSets(dataSets);
