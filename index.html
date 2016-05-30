@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Importações e Exportações por Continente</title>
+    <style>
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: auto;
+            position: relative;
+            width: 960px;
+        }
+
+        button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+    </style>
+    <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="data.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+
+            var width = 960,
+                height = 500;
+
+            var x = d3.scale.linear()
+                    .domain([minDate, maxDate])
+                    .range([0, width]);
+
+            var y = d3.scale.linear()
+                    .domain([0, maxValue])
+                    .range([height, 0]);
+
+            var stack = d3.layout.stack().offset("silhouette")
+                    .values(function(d) { return d.data; })
+                    .x(function(p) {
+                        return x(p.date);
+                    })
+                    .y(function(p) {
+                        return y(p.value);
+                    });
+
+            var layers0 = stack(preparedDataSet.importData),
+                layers1 = stack(preparedDataSet.exportData);
+
+            var color = d3.scale.linear()
+                .range(["#aad", "#556"]);
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            svg.selectAll("path")
+                .data(layers0)
+                .enter().append("path")
+//                .attr("d", area)
+                .style("fill", function() { return color(Math.random()); });
+
+            var updateBtn = document.getElementsByClassName("updateBtn").item(0);
+            updateBtn.onclick = function transition() {
+                d3.selectAll("path")
+                        .data(function() {
+                            var d = layers1;
+                            layers1 = layers0;
+                            return layers0 = d;
+                        })
+                        .transition()
+                        .duration(2500)
+                        .attr("d", area);
+            };
+        };
+    </script>
+</head>
+<body>
+    <h1>Importações e Exportações por Continente</h1>
+    <h2>Visualização de Dados - TP2</h2>
+    <div class="visualizacao">
+        <button class="updateBtn">Update</button>
+    </div>
+</body>
+</html>
