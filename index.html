@@ -12,20 +12,16 @@
             width: 960px;
         }
 
-        button {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
-
     </style>
     <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
     <script src="data.js"></script>
     <script type="text/javascript">
         window.onload = function () {
             var stack = d3.layout.stack().offset("silhouette").values(function(d) { return d; });
-            var importLayer = stack(testDataSet.importData),
-                exportLayer = stack(testDataSet.exportData);
+            var layers = {
+                "import" : stack(testDataSet.importData),
+                "export" : stack(testDataSet.exportData)
+            };
 
             var width = 960,
                 height = 500;
@@ -35,7 +31,7 @@
                 .range([0, width]);
 
             var y = d3.scale.linear()
-                .domain([0, d3.max(importLayer.concat(exportLayer), function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
+                .domain([0, d3.max(layers.import.concat(layers.export), function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
                 .range([height, 0]);
 
             var area = d3.svg.area()
@@ -48,7 +44,7 @@
                 .attr("height", height);
 
             svg.selectAll("path")
-                .data(importLayer)
+                .data(layers.import)
                 .enter().append("path")
                 .attr("d", area)
                 .style("fill", function(d, i) { return auxMap[i].color; })
@@ -56,18 +52,25 @@
                     return auxMap[i].name;
                 });
 
-            var updateBtn = document.getElementsByClassName("updateBtn").item(0);
-            updateBtn.onclick = function transition() {
+            function transition(layer) {
                 d3.selectAll("path")
-                    .data(function() {
-                        var d = exportLayer;
-                        exportLayer = importLayer;
-                        return importLayer = d;
-                    })
+                    .data(function() { return layer; })
                     .transition()
                     .duration(2500)
                     .attr("d", area);
-            };
+            }
+
+            document.getElementsByName("direction").forEach(function(element) {
+                element.onchange = function() {
+                    transition(layers[element.value]);
+                };
+            });
+
+            document.getElementsByName("unit").forEach(function(element) {
+                element.onchange = function() {
+                    alert(element.value);
+                }
+            });
         };
     </script>
 </head>
@@ -75,7 +78,48 @@
     <h1>Importações e Exportações por Continente</h1>
     <h2>Visualização de Dados - TP2</h2>
     <div class="visualization">
-        <button class="updateBtn">Toggle Import\Export</button>
+
+    </div>
+    <div class="legend">
+        <svg>
+            <g class="legend" transform="translate(0,0)">
+                <rect width="18" height="18" style="fill: yellow;"></rect>
+                <text x="22" y="14">Asia</text>
+            </g>
+            <g class="legend" transform="translate(0,22)">
+                <rect width="18" height="18" style="fill: blue;"></rect>
+                <text x="22" y="14">Europe</text>
+            </g>
+            <g class="legend" transform="translate(0,44)">
+                <rect width="18" height="18" style="fill: orange;"></rect>
+                <text x="22" y="14">North America</text>
+            </g>
+            <g class="legend" transform="translate(0,66)">
+                <rect width="18" height="18" style="fill: green;"></rect>
+                <text x="22" y="14">South America</text>
+            </g>
+            <g class="legend" transform="translate(0,88)">
+                <rect width="18" height="18" style="fill: pink;"></rect>
+                <text x="22" y="14">Africa</text>
+            </g>
+            <g class="legend" transform="translate(0,110)">
+                <rect width="18" height="18" style="fill: red;"></rect>
+                <text x="22" y="14">Oceania</text>
+            </g>
+        </svg>
+    </div>
+    <div class="controls">
+        <div class="direction">
+            Direction:
+            <input name="direction" type="radio" title="Direction" value="import" checked/> Import
+            <input name="direction" type="radio" title="Direction" value="export"/> Export
+        </div>
+
+        <div class="unit">
+            Measure unit:
+            <input name="unit" type="radio" title="Unit" value="absolute" checked/> Absolute
+            <input name="unit" type="radio" title="Unit" value="percent"/> Percent
+        </div>
     </div>
 </body>
 </html>
