@@ -2105,30 +2105,12 @@ var oceania = [
 ];
 
 var dataSets = [
-    {
-        "name" : "asia",
-        "values" : asia
-    }
-    ,{
-        "name" : "europe",
-        "values" : europe
-    }
-    ,{
-        "name" : "northAmerica",
-        "values" : northAmerica
-    }
-    ,{
-        "name" : "southAmerica",
-        "values" : southAmerica
-    }
-    //,{
-    //     "name" : "africa",
-    //     "values" : africa
-    // }
-    // ,{
-    //     "name" : "oceania",
-    //     "values" : oceania
-    // }
+    asia,
+    europe,
+    northAmerica,
+    southAmerica//,
+    // africa,
+    // oceania
 ];
 
 const DIRECTION = {
@@ -2148,17 +2130,10 @@ function prepareDataSets(dataSets) {
     var exportData = [];
 
     dataSets.forEach(function (dataSet) {
-        var importEntry = {
-            "name" : dataSet.name,
-            "data" : []
-        };
+        var importLayer = [];
+        var exportLayer = [];
 
-        var exportEntry = {
-            "name" : dataSet.name,
-            "data" : []
-        };
-
-        dataSet.values.forEach(function(row) {
+        dataSet.forEach(function(row) {
             var date      = (new Date(row[0])).getTime();
             var direction = row[1];
             var value     = parseInt(row[2]);
@@ -2167,16 +2142,16 @@ function prepareDataSets(dataSets) {
             minDate  = simpleMin(minDate, date);
             maxDate  = simpleMax(maxDate, date);
 
-            var entryToAppend  = direction === DIRECTION.EXPORT ? exportEntry : importEntry;
-            entryToAppend.data.push({
+            var entryToAppend  = direction === DIRECTION.EXPORT ? exportLayer : importLayer;
+            entryToAppend.push({
                 "x" : date,
                 "y" : value
             });
 
         });
 
-        importData.push(importEntry);
-        exportData.push(exportEntry);
+        importData.push(importLayer);
+        exportData.push(exportLayer);
     });
 
     return {
@@ -2186,17 +2161,6 @@ function prepareDataSets(dataSets) {
 }
 
 var preparedDataSet = prepareDataSets(dataSets);
-
-function test(dataSets) {
-    return dataSets.map(function (dataSet) {
-        return dataSet.data.map(function(entry) {
-            return {
-                "x" : entry.x,
-                "y" : entry.y
-            };
-        });
-    });
-}
 
 var auxMap = [
     {
@@ -2224,8 +2188,3 @@ var auxMap = [
         "color" : "red"
     }
 ];
-
-var testDataSet = {
-    "importData" : test(preparedDataSet.importData),
-    "exportData" : test(preparedDataSet.exportData)
-};

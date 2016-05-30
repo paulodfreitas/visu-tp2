@@ -19,8 +19,8 @@
         window.onload = function () {
             var stack = d3.layout.stack().offset("silhouette").values(function(d) { return d; });
             var layers = {
-                "import" : stack(testDataSet.importData),
-                "export" : stack(testDataSet.exportData)
+                "import" : stack(preparedDataSet.importData),
+                "export" : stack(preparedDataSet.exportData)
             };
 
             var width = 960,
