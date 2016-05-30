@@ -19,40 +19,90 @@
         window.onload = function () {
             var stack = d3.layout.stack().offset("silhouette").values(function(d) { return d; });
             var layers = {
-                "import" : stack(absoluteLayers.import),
-                "export" : stack(absoluteLayers.export)
+                "absolute" : {
+                    "import" : stack(absoluteLayers.import),
+                    "export" : stack(absoluteLayers.export)
+                },
+                "percent"  : {
+                    "import" : stack(percentLayers.import),
+                    "export" : stack(percentLayers.export)
+                }
             };
 
             var width = 960,
                 height = 500;
 
-            var x = d3.scale.linear()
-                .domain([minDate, maxDate])
-                .range([0, width]);
+            function getAbsoluteArea() {
+                var x = d3.scale.linear()
+                        .domain([minDate, maxDate])
+                        .range([0, width]);
 
-            var y = d3.scale.linear()
-                .domain([0, d3.max(layers.import.concat(layers.export), function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
-                .range([height, 0]);
+                var y = d3.scale.linear()
+                        .domain([0, d3.max(layers.absolute.import.concat(layers.absolute.export), function (layer) {
+                            return d3.max(layer, function (d) {
+                                return d.y0 + d.y;
+                            });
+                        })])
+                        .range([height, 0]);
 
-            var area = d3.svg.area()
-                .x(function(d) { return x(d.x); })
-                .y0(function(d) { return y(d.y0); })
-                .y1(function(d) { return y(d.y0 + d.y); });
+                return d3.svg.area()
+                        .x(function (d) {
+                            return x(d.x);
+                        })
+                        .y0(function (d) {
+                            return y(d.y0);
+                        })
+                        .y1(function (d) {
+                            return y(d.y0 + d.y);
+                        });
+            }
+
+            function getPercentArea() {
+                var x = d3.scale.linear()
+                        .domain([minDate, maxDate])
+                        .range([0, width]);
+
+                var y = d3.scale.linear()
+                        .domain([0, 100])
+                        .range([height, 0]);
+
+                return d3.svg.area()
+                        .x(function (d) {
+                            return x(d.x);
+                        })
+                        .y0(function (d) {
+                            return y(d.y0);
+                        })
+                        .y1(function (d) {
+                            return y(d.y0 + d.y);
+                        });
+            }
+
+            var areas = {
+                "absolute" : getAbsoluteArea(),
+                "percent"  : getPercentArea()
+            };
 
             var svg = d3.select(".visualization").append("svg")
                 .attr("width", width)
                 .attr("height", height);
 
             svg.selectAll("path")
-                .data(layers.import)
+                .data(layers.absolute.import)
                 .enter().append("path")
-                .attr("d", area)
+                .attr("d", areas.absolute)
                 .style("fill", function(d, i) { return auxMap[i].color; })
                 .append("title").text(function(d, i) {
                     return auxMap[i].name;
                 });
 
-            function transition(layer) {
+
+            var direction = "import";
+            var unit      = "absolute";
+
+            function transition() {
+                var layer = layers[unit][direction];
+                var area = areas[unit];
                 d3.selectAll("path")
                     .data(function() { return layer; })
                     .transition()
@@ -60,16 +110,19 @@
                     .attr("d", area);
             }
 
+
             document.getElementsByName("direction").forEach(function(element) {
                 element.onchange = function() {
-                    transition(layers[element.value]);
+                    direction = element.value;
+                    transition();
                 };
             });
 
             document.getElementsByName("unit").forEach(function(element) {
                 element.onchange = function() {
-                    alert(element.value);
-                }
+                    unit = element.value;
+                    transition();
+                };
             });
         };
     </script>

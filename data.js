@@ -2181,3 +2181,28 @@ function prepareDataSets(dataSets) {
 }
 
 var absoluteLayers = prepareDataSets(dataSets);
+
+function convertIntoPercentLayers(absoluteLayers) {
+    var percentLayers = JSON.parse(JSON.stringify(absoluteLayers));
+
+    var xAxisLength = absoluteLayers[0].length;
+    var nrLayers = absoluteLayers.length;
+
+    for (var i = 0; i < xAxisLength ; i++) {
+        var sumOfValues = 0;
+        for (var j = 0; j < nrLayers; j++) {
+            sumOfValues += absoluteLayers[j][i]["y"];
+        }
+
+        for (var k = 0; k < nrLayers; k++) {
+            percentLayers[k][i]["y"] = (100 * absoluteLayers[k][i]["y"]) / sumOfValues;
+        }
+    }
+
+    return percentLayers;
+}
+
+var percentLayers = {
+    "import" : convertIntoPercentLayers(absoluteLayers.import),
+    "export" : convertIntoPercentLayers(absoluteLayers.export)
+};
