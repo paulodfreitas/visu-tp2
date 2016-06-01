@@ -16,6 +16,10 @@
     <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
     <script src="data.js"></script>
     <script type="text/javascript">
+        function nodeList2Array(nodeList) {
+            return [...nodeList];
+        }
+
         window.onload = function () {
             var stack = d3.layout.stack().offset("silhouette").values(function(d) { return d; });
             var layers = {
@@ -110,15 +114,14 @@
                     .attr("d", area);
             }
 
-
-            document.getElementsByName("direction").forEach(function(element) {
+            nodeList2Array(document.getElementsByName("direction")).forEach(function(element) {
                 element.onchange = function() {
                     direction = element.value;
                     transition();
                 };
             });
 
-            document.getElementsByName("unit").forEach(function(element) {
+            nodeList2Array(document.getElementsByName("unit")).forEach(function(element) {
                 element.onchange = function() {
                     unit = element.value;
                     transition();
