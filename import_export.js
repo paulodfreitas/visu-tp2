@@ -2434,27 +2434,52 @@ function prepareDataSets(dataSets) {
 
 var absoluteLayers = prepareDataSets(dataSets);
 
-function convertIntoPercentLayers(absoluteLayers) {
-    var percentLayers = JSON.parse(JSON.stringify(absoluteLayers));
-
-    var xAxisLength = absoluteLayers[0].length;
-    var nrLayers = absoluteLayers.length;
-
-    for (var i = 0; i < xAxisLength ; i++) {
-        var sumOfValues = 0;
-        for (var j = 0; j < nrLayers; j++) {
-            sumOfValues += absoluteLayers[j][i]["y"];
+function initImportExport (width, height, direction, selector) {
+    var stack = d3.layout.stack().offset("stack").values(function(d) { return d; });
+    var layers = {
+        "absolute" : {
+            "import" : stack(absoluteLayers.import),
+            "export" : stack(absoluteLayers.export)
         }
+    };
+    
+    function getAbsoluteArea() {
+        var x = d3.scale.linear()
+            .domain([minDate, maxDate])
+            .range([0, width]);
 
-        for (var k = 0; k < nrLayers; k++) {
-            percentLayers[k][i]["y"] = (100 * absoluteLayers[k][i]["y"]) / sumOfValues;
-        }
+        var y = d3.scale.linear()
+            .domain([0, d3.max(layers.absolute.import.concat(layers.absolute.export), function (layer) {
+                return d3.max(layer, function (d) {
+                    return d.y0 + d.y;
+                });
+            })])
+            .range([height, 0]);
+
+        return d3.svg.area()
+            .x(function (d) {
+                return x(d.x);
+            })
+            .y0(function (d) {
+                return y(d.y0);
+            })
+            .y1(function (d) {
+                return y(d.y0 + d.y);
+            });
     }
 
-    return percentLayers;
-}
+    var area = getAbsoluteArea();
 
-var percentLayers = {
-    "import" : convertIntoPercentLayers(absoluteLayers.import),
-    "export" : convertIntoPercentLayers(absoluteLayers.export)
-};
+    var svg = d3.select(selector).append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.selectAll("path")
+        .data(layers.absolute[direction])
+        .enter().append("path")
+        .attr("d", area)
+        .style("fill", function(d, i) { return auxMap[i].color; })
+        .append("title").text(function(d, i) {
+        return auxMap[i].name;
+    });
+}

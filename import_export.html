@@ -14,126 +14,21 @@
 
     </style>
     <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
-    <script src="data.js"></script>
+    <script src="import_export.js"></script>
     <script type="text/javascript">
-        function nodeList2Array(nodeList) {
-            return Array.prototype.slice.call(nodeList);
-        }
-
-        window.onload = function () {
-            var stack = d3.layout.stack().offset("silhouette").values(function(d) { return d; });
-            var layers = {
-                "absolute" : {
-                    "import" : stack(absoluteLayers.import),
-                    "export" : stack(absoluteLayers.export)
-                },
-                "percent"  : {
-                    "import" : stack(percentLayers.import),
-                    "export" : stack(percentLayers.export)
-                }
-            };
-
-            var width = 960,
-                height = 500;
-
-            function getAbsoluteArea() {
-                var x = d3.scale.linear()
-                        .domain([minDate, maxDate])
-                        .range([0, width]);
-
-                var y = d3.scale.linear()
-                        .domain([0, d3.max(layers.absolute.import.concat(layers.absolute.export), function (layer) {
-                            return d3.max(layer, function (d) {
-                                return d.y0 + d.y;
-                            });
-                        })])
-                        .range([height, 0]);
-
-                return d3.svg.area()
-                        .x(function (d) {
-                            return x(d.x);
-                        })
-                        .y0(function (d) {
-                            return y(d.y0);
-                        })
-                        .y1(function (d) {
-                            return y(d.y0 + d.y);
-                        });
-            }
-
-            function getPercentArea() {
-                var x = d3.scale.linear()
-                        .domain([minDate, maxDate])
-                        .range([0, width]);
-
-                var y = d3.scale.linear()
-                        .domain([0, 100])
-                        .range([height, 0]);
-
-                return d3.svg.area()
-                        .x(function (d) {
-                            return x(d.x);
-                        })
-                        .y0(function (d) {
-                            return y(d.y0);
-                        })
-                        .y1(function (d) {
-                            return y(d.y0 + d.y);
-                        });
-            }
-
-            var areas = {
-                "absolute" : getAbsoluteArea(),
-                "percent"  : getPercentArea()
-            };
-
-            var svg = d3.select(".visualization").append("svg")
-                .attr("width", width)
-                .attr("height", height);
-
-            svg.selectAll("path")
-                .data(layers.absolute.import)
-                .enter().append("path")
-                .attr("d", areas.absolute)
-                .style("fill", function(d, i) { return auxMap[i].color; })
-                .append("title").text(function(d, i) {
-                    return auxMap[i].name;
-                });
-
-
-            var direction = "import";
-            var unit      = "absolute";
-
-            function transition() {
-                var layer = layers[unit][direction];
-                var area = areas[unit];
-                d3.selectAll("path")
-                    .data(function() { return layer; })
-                    .transition()
-                    .duration(2500)
-                    .attr("d", area);
-            }
-
-            nodeList2Array(document.getElementsByName("direction")).forEach(function(element) {
-                element.onchange = function() {
-                    direction = element.value;
-                    transition();
-                };
-            });
-
-            nodeList2Array(document.getElementsByName("unit")).forEach(function(element) {
-                element.onchange = function() {
-                    unit = element.value;
-                    transition();
-                };
-            });
+        window.onload = function() {
+            initImportExport(960, 540, "import", ".import_by_continent");
+            initImportExport(960, 540, "export", ".export_by_continent");
         };
     </script>
 </head>
 <body>
     <h1>Importações e Exportações por Continente</h1>
     <h2>Visualização de Dados - TP2</h2>
-    <div class="visualization">
+    <div class="import_by_continent">
+
+    </div>
+    <div class="export_by_continent">
 
     </div>
     <div class="legend">
@@ -163,19 +58,6 @@
                 <text x="22" y="14">Oceania</text>
             </g>
         </svg>
-    </div>
-    <div class="controls">
-        <div class="direction">
-            Direction:
-            <input name="direction" type="radio" title="Direction" value="import" checked/> Import
-            <input name="direction" type="radio" title="Direction" value="export"/> Export
-        </div>
-
-        <div class="unit">
-            Measure unit:
-            <input name="unit" type="radio" title="Unit" value="absolute" checked/> Absolute
-            <input name="unit" type="radio" title="Unit" value="percent"/> Percent
-        </div>
     </div>
 </body>
 </html>
