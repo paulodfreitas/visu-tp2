@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head><title>Jobs per Salary Range - Brazil (2002-2013)</title>
+<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="http://getbootstrap.com/examples/justified-nav/justified-nav.css" rel="stylesheet">
+
+<style>
+  .text_axis {
+    font-family: Lato;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .axis text {
+    font-family: Lato;
+    font-size: 13px;
+  }
+
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .bar {
+    fill: steelblue;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+
+  .d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+  }
+
+  .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+  }
+
+  .d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+  }
+  
+  h1 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: auto;
+    position: relative;
+    width: 960px;
+  }
+
+</style>
+
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <script>function InitChart() {
+
+    var margin = {top: 50, right: 20, bottom: 50, left: 100},
+    width = 1080 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    var x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+      .rangeRound([height, 0]);
+
+    var color = d3.scale.ordinal()
+      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickFormat(d3.format(".2s"));
+
+    var svg = d3.select("#visualization").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    d3.csv("Jobs_per_Salary_Range.csv", function(error, data) {
+      if (error) throw error;
+
+      color.domain(d3.keys(data[0]).filter(function(key) { return key !== "Ano"; }));
+
+      data.forEach(function(d) {
+        var y0 = 0;
+        d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
+        d.total = d.ages[d.ages.length - 1].y1;
+      });
+
+      data.sort(function(a, b) { return a.total - b.total; });
+
+      x.domain(data.map(function(d) { return d.Ano; }));
+      y.domain([0, d3.max(data, function(d) { return d.total; })]);
+
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("class", "text_axis") 
+        .attr("transform", "translate("+ (margin.left - 150) +","+(height/2)+")rotate(-90)")
+        .text("Total Number of Jobs");
+
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("class", "text_axis")  
+        .attr("transform", "translate("+ (width/2) +","+(height-(margin.bottom - 100))+")")
+        .text("Year");
+
+
+       var tip = d3.tip()
+         .attr('class', 'd3-tip')
+         .offset([-10, 0])
+         .html(function(d) {
+           return "<strong>Salary Range (R$): </strong> <span style='color:red'>"+ d.name + "</span>"
+           + "<strong> Number of Jobs:</strong> <span style='color:red'>" + (d.y1 - d.y0) + "</span>";
+       });
+
+       svg.call(tip);
+
+       var state = svg.selectAll(".ano")
+         .data(data)
+         .enter().append("g")
+         .attr("class", "g")
+         .attr("transform", function(d) { return "translate(" + x(d.Ano) + ",0)"; });
+
+       state.selectAll("rect")
+         .data(function(d) { return d.ages; })
+         .enter().append("rect")
+         .attr("width", x.rangeBand())
+         .attr("y", function(d) { return y(d.y1); })
+         .attr("height", function(d) { return y(d.y0) - y(d.y1); })
+         .style("fill", function(d) { return color(d.name); })
+         .on('mouseover', tip.show)
+         .on('mouseout', tip.hide);	
+
+       var legend = svg.selectAll(".legend")
+         .data(color.domain().slice().reverse())
+         .enter().append("g")
+         .attr("class", "legend")
+         .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+       legend.append("rect")
+         .attr("x", width - 852)
+         .attr("width", 18)
+         .attr("height", 18)
+         .style("fill", color);
+ 
+       legend.append("text")
+         .attr("x", width - 858 )
+         .attr("y", 9)
+         .attr("dy", ".35em")
+         .style("text-anchor", "end")
+         .text(function(d) { return d; });
+
+    });
+    }
+    window.onload = InitChart;
+  </script>
+</head>
+<body>
+  <h1>Jobs per Salary Range - Brazil (2002-2015)</h1>
+  <div class="container">
+    <div class="jumbotron">
+      <div id="visualization" width="1000" height="500"></div>
+    </div>
+  </div>
+</body>
+</html>
+
