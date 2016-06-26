@@ -73,13 +73,23 @@
             top: 60px;
         }
 
+        #import_by_continent {
+            position: relative;
+        }
+
+        #export_by_continent {
+            position: relative;
+        }
+
     </style>
     <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script src="trade_balance.js" charset="utf-8"></script>
+    <script src="import_export.js" charset="utf-8"></script>
     <script>
         window.onload = function () {
             initTradeBalance(480, 270);
+            initImportExport(480, 270);
         };
     </script>
 </head>
@@ -108,9 +118,39 @@
                 </svg>
             </div>
         </div>
+
+        <div id="import_by_continent">
+            <!--<div class="legend">-->
+                <!--<svg>-->
+                    <!--<g class="legend" transform="translate(0,0)">-->
+                        <!--<rect width="18" height="18" style="fill: yellow;"></rect>-->
+                        <!--<text x="22" y="14">Asia</text>-->
+                    <!--</g>-->
+                    <!--<g class="legend" transform="translate(0,22)">-->
+                        <!--<rect width="18" height="18" style="fill: blue;"></rect>-->
+                        <!--<text x="22" y="14">Europe</text>-->
+                    <!--</g>-->
+                    <!--<g class="legend" transform="translate(0,44)">-->
+                        <!--<rect width="18" height="18" style="fill: orange;"></rect>-->
+                        <!--<text x="22" y="14">North America</text>-->
+                    <!--</g>-->
+                    <!--<g class="legend" transform="translate(0,66)">-->
+                        <!--<rect width="18" height="18" style="fill: green;"></rect>-->
+                        <!--<text x="22" y="14">South America</text>-->
+                    <!--</g>-->
+                    <!--<g class="legend" transform="translate(0,88)">-->
+                        <!--<rect width="18" height="18" style="fill: pink;"></rect>-->
+                        <!--<text x="22" y="14">Africa</text>-->
+                    <!--</g>-->
+                    <!--<g class="legend" transform="translate(0,110)">-->
+                        <!--<rect width="18" height="18" style="fill: red;"></rect>-->
+                        <!--<text x="22" y="14">Oceania</text>-->
+                    <!--</g>-->
+                <!--</svg>-->
+            <!--</div>-->
+        </div>
+        <div id="export_by_continent"> </div>
     </div>
-
-
 
     <div id="internal">
         <h2>Mercado interno</h2>

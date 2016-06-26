@@ -2458,3 +2458,86 @@ var percentLayers = {
     "import" : convertIntoPercentLayers(absoluteLayers.import),
     "export" : convertIntoPercentLayers(absoluteLayers.export)
 };
+
+function initImportExport(width, height) {
+    var stack = d3.layout.stack().offset("stack").values(function(d) { return d; });
+    var layers = {
+        "absolute" : {
+            "import" : stack(absoluteLayers.import),
+            "export" : stack(absoluteLayers.export)
+        },
+        "percent"  : {
+            "import" : stack(percentLayers.import),
+            "export" : stack(percentLayers.export)
+        }
+    };
+
+    function getAbsoluteArea() {
+        var x = d3.scale.linear()
+            .domain([minDate, maxDate])
+            .range([0, width]);
+
+        var y = d3.scale.linear()
+            .domain([0, d3.max(layers.absolute.import.concat(layers.absolute.export), function (layer) {
+                return d3.max(layer, function (d) {
+                    return d.y0 + d.y;
+                });
+            })])
+            .range([height, 0]);
+
+        return d3.svg.area()
+            .x(function (d) {
+                return x(d.x);
+            })
+            .y0(function (d) {
+                return y(d.y0);
+            })
+            .y1(function (d) {
+                return y(d.y0 + d.y);
+            });
+    }
+
+    function getPercentArea() {
+        var x = d3.scale.linear()
+            .domain([minDate, maxDate])
+            .range([0, width]);
+
+        var y = d3.scale.linear()
+            .domain([0, 100])
+            .range([height, 0]);
+
+        return d3.svg.area()
+            .x(function (d) {
+                return x(d.x);
+            })
+            .y0(function (d) {
+                return y(d.y0);
+            })
+            .y1(function (d) {
+                return y(d.y0 + d.y);
+            });
+    }
+
+    var areas = {
+        "absolute" : getAbsoluteArea(),
+        "percent"  : getPercentArea()
+    };
+
+    function drawGraph(selector, direction) {
+        var svg = d3.select(selector).append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        svg.selectAll("path")
+            .data(layers.absolute[direction])
+            .enter().append("path")
+            .attr("d", areas.absolute)
+            .style("fill", function(d, i) { return auxMap[i].color; })
+            .append("title").text(function(d, i) {
+            return auxMap[i].name;
+        });
+    }
+
+    drawGraph("#import_by_continent", "import");
+    drawGraph("#export_by_continent", "export");
+}
