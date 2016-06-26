@@ -62,12 +62,24 @@
             width: 960px;
         }
     </style>
+    <style>
+        #trade_balance {
+            position: relative;
+            border: 3px solid #73AD21;
+        }
+        #trade_balance>div.legend {
+            position: absolute;
+            left: 120px;
+            top: 60px;
+        }
+
+    </style>
     <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script src="trade_balance.js" charset="utf-8"></script>
     <script>
         window.onload = function () {
-            initTradeBalance();
+            initTradeBalance(480, 270);
         };
     </script>
 </head>
@@ -82,8 +94,8 @@
         <h3>Como anda a balança comercial?</h3>
         <h3>Quais são os principais parceiros comerciais do Brasil nesta indústria?</h3>
         <div id="trade_balance">
-            <svg id="trade_balance_svg" width="1000" height="500"></svg>
-            <div class="trade_balance_legend">
+            <svg id="trade_balance_svg" width="480" height="270"></svg>
+            <div class="legend">
                 <svg>
                     <g class="legend" transform="translate(0,0)">
                         <rect width="18" height="18" style="fill: red;"></rect>
@@ -97,6 +109,8 @@
             </div>
         </div>
     </div>
+
+
 
     <div id="internal">
         <h2>Mercado interno</h2>

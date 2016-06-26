@@ -1572,8 +1572,8 @@ function initTradeBalance(w, h) {
         .entries(data);
 
     var vis = d3.select("#trade_balance_svg"),
-        WIDTH = 1000,
-        HEIGHT = 500,
+        WIDTH = w,
+        HEIGHT = h,
         MARGINS = {
             top: 50,
             right: 20,
