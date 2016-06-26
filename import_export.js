@@ -2481,25 +2481,34 @@ function initImportExport (width, height, direction, selector) {
 
     var area = getAbsoluteArea();
 
-    var svg = d3.select(selector).append("svg")
+    var vis = d3.select(selector).append("svg")
         .attr("width", width)
         .attr("height", height);
 
-    svg.selectAll("path")
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d, i) {
+            return "<strong>Date:</strong><span style='color:red'>" + new Date(d.date).toLocaleDateString("en-US") + "</span>"
+                 + "<strong>Value($USD):</strong><span style='color:red'>" + d.value + "</span>";
+        });
+
+    vis.call(tip);
+
+    vis.selectAll("path")
         .data(layers.absolute[direction])
         .enter().append("path")
         .attr("d", area)
-        .style("fill", function(d, i) { return auxMap[i].color; })
-        .append("title").text(function(d, i) {
-        return auxMap[i].name;
-    });
+        .style("fill", function(d, i) { return auxMap[i].color; });
+        // .on('mouseover', tip.show)
+        // .on('mouseout', tip.hide);
 
-    svg.append("svg:g")
+    vis.append("svg:g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + (height - MARGINS.bottom) + ")")
         .call(xAxis);
 
-    svg.append("svg:g")
+    vis.append("svg:g")
         .attr("class", "y axis")
         .attr("transform", "translate(" + (MARGINS.left) + ",0)")
         .call(yAxis);
