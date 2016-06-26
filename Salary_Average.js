@@ -1,0 +1,42 @@
+var data = [{
+    "sale": "2300",
+    "year": "2002"
+}, {
+    "sale": "2750",
+    "year": "2003"
+}, {
+    "sale": "3000",
+    "year": "2004"
+}, {
+    "sale": "3250",
+    "year": "2005"
+}, {
+    "sale": "3500",
+    "year": "2006"
+}, {
+    "sale": "3500",
+    "year": "2007"
+}, {
+    "sale": "3750",
+    "year": "2008"
+}, {
+    "sale": "4000",
+    "year": "2009"
+}, {
+    "sale": "4250",
+    "year": "2010"
+}, {
+    "sale": "4500",
+    "year": "2011"
+}, {
+    "sale": "4750",
+    "year": "2012"
+}, {
+    "sale": "5500",
+    "year": "2013"
+}].map(function(d) {
+     return {
+	sale: parseInt(d.sale),
+	year: parseInt(d.year)
+     }
+});
