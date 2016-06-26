@@ -2435,6 +2435,12 @@ function prepareDataSets(dataSets) {
 var absoluteLayers = prepareDataSets(dataSets);
 
 function initImportExport (width, height, direction, selector) {
+
+    var MARGINS = {
+        bottom : 20,
+        left   : 60
+    };
+
     var stack = d3.layout.stack().offset("stack").values(function(d) { return d; });
     var layers = {
         "absolute" : {
@@ -2442,20 +2448,20 @@ function initImportExport (width, height, direction, selector) {
             "export" : stack(absoluteLayers.export)
         }
     };
+
+    var x = d3.time.scale()
+        .domain([minDate, maxDate])
+        .range([MARGINS.left, width]);
+
+    var y = d3.scale.linear()
+        .domain([0, d3.max(layers.absolute.import.concat(layers.absolute.export), function (layer) {
+            return d3.max(layer, function (d) {
+                return d.y0 + d.y;
+            });
+        })])
+        .range([height - MARGINS.bottom, 0]);
     
     function getAbsoluteArea() {
-        var x = d3.scale.linear()
-            .domain([minDate, maxDate])
-            .range([0, width]);
-
-        var y = d3.scale.linear()
-            .domain([0, d3.max(layers.absolute.import.concat(layers.absolute.export), function (layer) {
-                return d3.max(layer, function (d) {
-                    return d.y0 + d.y;
-                });
-            })])
-            .range([height, 0]);
-
         return d3.svg.area()
             .x(function (d) {
                 return x(d.x);
@@ -2467,6 +2473,11 @@ function initImportExport (width, height, direction, selector) {
                 return y(d.y0 + d.y);
             });
     }
+
+    var xAxis = d3.svg.axis().scale(x);
+    var yAxis = d3.svg.axis().scale(y).tickFormat(function(a) {
+        return (a / 1000000) + " M";
+    }).orient("left");
 
     var area = getAbsoluteArea();
 
@@ -2482,4 +2493,14 @@ function initImportExport (width, height, direction, selector) {
         .append("title").text(function(d, i) {
         return auxMap[i].name;
     });
+
+    svg.append("svg:g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + (height - MARGINS.bottom) + ")")
+        .call(xAxis);
+
+    svg.append("svg:g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+        .call(yAxis);
 }
