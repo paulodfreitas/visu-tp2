@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Importações e Exportações por Continente</title>
+    <style>
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: auto;
+            position: relative;
+            width: 960px;
+        }
+
+        .text_axis
+        {
+            font-family: Lato;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .axis path {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+        .axis text {
+            font-family: Lato;
+            font-size: 13px;
+        }
+        .legend {
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="http://rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+    <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="import_export.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            initImportExport(960, 540, "import", ".import_by_continent");
+            initImportExport(960, 540, "export", ".export_by_continent");
+        };
+    </script>
+</head>
+<body>
+    <h1>Importações por Continente</h1>
+    <div class="import_by_continent">
+
+    </div>
+    <div class="legend">
+        <svg>
+            <g class="legend" transform="translate(0,0)">
+                <rect width="18" height="18" style="fill: yellow;"></rect>
+                <text x="22" y="14">Asia</text>
+            </g>
+            <g class="legend" transform="translate(0,22)">
+                <rect width="18" height="18" style="fill: blue;"></rect>
+                <text x="22" y="14">Europe</text>
+            </g>
+            <g class="legend" transform="translate(0,44)">
+                <rect width="18" height="18" style="fill: orange;"></rect>
+                <text x="22" y="14">North America</text>
+            </g>
+            <g class="legend" transform="translate(0,66)">
+                <rect width="18" height="18" style="fill: green;"></rect>
+                <text x="22" y="14">South America</text>
+            </g>
+            <g class="legend" transform="translate(0,88)">
+                <rect width="18" height="18" style="fill: pink;"></rect>
+                <text x="22" y="14">Africa</text>
+            </g>
+            <g class="legend" transform="translate(0,110)">
+                <rect width="18" height="18" style="fill: red;"></rect>
+                <text x="22" y="14">Oceania</text>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>
