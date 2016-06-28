@@ -15,7 +15,10 @@
         <div class="flexslider">
           <ul class="slides">
             <li>
-  	    	    <iframe src="../data/Trade_Balance_General.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
+              <iframe src="../data/Trade_Balance_General.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
+            </li>
+            <li>
+  	    	    <iframe src="../data/Absolute_Growth.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
   	    		</li>
   	    		
           </ul>

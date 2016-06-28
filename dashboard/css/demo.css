@@ -186,7 +186,20 @@ body {width: 100%; float: left; opacity: 1; -webkit-transition: opacity 1s ease;
 /* Layout
 ***********************/
 /*#container {padding: 60px 40px 100px;}*/
-header {width: 420px; float: left;}
+header {
+	float: right;
+	/*height: 20px;*/
+	/*padding: 5px;*/
+}
+header > ul > li {
+	background: black;
+	border: 1px solid green;
+	/*width: 50px;*/
+	float: left;
+	margin: 5px;
+	padding: 5px;
+}
+
 #main {
 	/*margin-left: 420px;*/
 	/*margin-top: -25px;*/

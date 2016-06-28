@@ -17,6 +17,9 @@
             <li>
   	    	    <iframe src="../data/Num_Jobs_Per_State_Brazil.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
   	    		</li>
+            <li>
+              <iframe src="../data/Jobs_per_Salary_Range.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
+            </li>
           </ul>
         </div>
       </section>
