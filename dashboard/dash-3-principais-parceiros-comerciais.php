@@ -21,6 +21,10 @@
   	    		<li>
   	    	    <iframe src="../data/export.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
   	    		</li>
+                        <li>
+                    <iframe src="../data/Main_Partners.html" width="100%" frameborder="1" id="frame-6" class="frame" scrolling="no" onLoad="resizeIframe(this);"></iframe>
+                        </li>
+
           </ul>
         </div>
       </section>
