@@ -36,10 +36,10 @@
 
 <ul>
 
-<li><a href="dash-3-principais-parceiros-comerciais.php">Parceiros</a></li>  
-<li><a href="dash-4-balanca-comercial.php">Balança</a></li>  
-<li><a href="dash-5-empregos.php">Empregos</a></li>  
-<li><a href="dash-6-estados-cidades-mais-importantes.php">Localidades</a></li>  
+<li><a href="dash-3-principais-parceiros-comerciais.php">Business Partners</a></li>  
+<li><a href="dash-4-balanca-comercial.php">Balance of Trade (BOT)</a></li>  
+<li><a href="dash-5-empregos.php">Jobs</a></li>  
+<li><a href="dash-6-estados-cidades-mais-importantes.php">States and Cities</a></li>  
 
 </ul>
   
