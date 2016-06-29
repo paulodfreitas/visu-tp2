@@ -7,7 +7,7 @@
 
   <div id="container" class="cf">
 
-  <h1>BALANÇA COMERCIAL</h1>
+  <h1>BALANCE OF TRADE (BOT)</h1>
 
 
 	<div id="main" role="main">

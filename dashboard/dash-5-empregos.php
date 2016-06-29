@@ -7,7 +7,7 @@
 
   <div id="container" class="cf">
 
-  <h1>PARCEIROS COMERCIAIS</h1>
+  <h1>JOBS</h1>
 
 
 	<div id="main" role="main">

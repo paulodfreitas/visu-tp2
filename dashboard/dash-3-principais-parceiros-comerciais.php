@@ -8,7 +8,7 @@
   <div id="container" class="cf">
   
 
-  <h1>PRINCIPAIS PARCEIROS COMERCIAIS</h1>
+  <h1>KEY BUSINESS PARTNERS</h1>
 
 
 	<div id="main" role="main">

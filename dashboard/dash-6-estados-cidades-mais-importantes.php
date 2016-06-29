@@ -7,7 +7,7 @@
 
   <div id="container" class="cf">
 
-  <h1>ESTADOS E CIDADES MAIS IMPORTANTES</h1>
+  <h1>MOST IMPORTANT STATES AND CITIES</h1>
 
 
 	<div id="main" role="main">
