@@ -5,7 +5,7 @@
 <script src="http://d3js.org/d3.v2.js"></script>
 <script src="http://code.jquery.com/jquery-1.7.1.js"></script>
 
-<h1>Maiores Parceiros </h1>
+<h1>Municípios no Brasil que Mais Comercializam Carros - Importações</h1>
 
 <p id="chart">
 <p id="rawdata">
@@ -38,12 +38,12 @@
 		// You can comment out the whole csv section if you just have a JSON file.
     // loadJSONFile('data/portaldata.json');
 
-    	d3.csv("Main_Partners.csv", function(csv_data){
+    	d3.csv("Import_State.csv", function(csv_data){
 
 			// Add, remove or change the key values to change the hierarchy. 
       var nested_data = d3.nest()
-       				.key(function(d)  { return d.Wld2; })
-				.key(function(d)  { return d.WldDisplay; })
+       				.key(function(d)  { return d.bra_state; })
+				.key(function(d)  { return d.bra_display; })
 				      .entries(csv_data);
 			
 			// Creat the root node for the treemap
@@ -54,7 +54,7 @@
 			root.values = nested_data;
 		
 			// Change the key names and children values from .next and add values for a chosen column to define the size of the blocks
-			root = reSortRoot(root,"ExportVal");
+			root = reSortRoot(root,"import_val");
 			
 			// DEBUG
 // 			$("#rawdata").html(JSON.stringify(root));
