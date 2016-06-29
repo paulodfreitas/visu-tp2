@@ -102,7 +102,7 @@ function display(d) {
 		.enter().append("g");
 		/* transition on child click */
 	g.filter(function(d) { 
-		var cont_names = ["Ásia", "Africa", "Europa", "Oceania", "América do Norte", "América do Sul"];
+		var cont_names = ["Ásia", "Africa", "Europa", "Oceania", "América do Norte", "América do Sul", "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"];
 		return cont_names.indexOf(d.name) != -1;
 	 })
 		.classed("children", true)
