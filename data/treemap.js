@@ -101,7 +101,10 @@ function display(d) {
 		.data(d.children)
 		.enter().append("g");
 		/* transition on child click */
-	g.filter(function(d) { return d.children; })
+	g.filter(function(d) { 
+		var cont_names = ["Ásia", "Africa", "Europa", "Oceania", "América do Norte", "América do Sul"];
+		return cont_names.indexOf(d.name) != -1;
+	 })
 		.classed("children", true)
 		.on("click", transition);
 		/* write children rectangles */
