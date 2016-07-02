@@ -32,6 +32,13 @@
 
 </head>
 
+<h1>
+Brazilian Automotive Industry
+</h1>
+<div style="text-align:center">
+Pedro Magalhães Fortini, Marcella Souza, Juan Oliveira, Paulo Freitas Coleta Neto, Vitor Duarte Venâncio, Lucas Barsand
+</div>
+
 <header>
 
 <ul>
